@@ -65,28 +65,53 @@ def clean_data(df):
 
 
 def save_data(df, database_filename):
+    '''
+    cleans the dataframe by separating out new identification columns
+    and returning the dataframe without duplicates or null values
+    
+    Arguments:
+    df - the complete dataframe to be saved as an SQLite Database
+    database_filename - file in which to save the SQLite Database
+    
+    Returns:
+    None
+    '''
+    
+    # create the sqlalchemy engine with which to build and store the table
     engine = create_engine('sqlite:///'+database_filename)
+    # store the dataframe as a table entitled DisasterResponse in the file (overwrite/replace any existing table)
     df.to_sql('DisasterResponse', engine, if_exists='replace',index=False)
 
 
 def main():
+    '''
+    
+    '''
+    
+    # verify the proper number of arguments are given in the execution of the program
     if len(sys.argv) == 4:
-
+        # extract the necessary variables from the call to execute the program
         messages_filepath, categories_filepath, database_filepath = sys.argv[1:]
 
+        # store the resulting dataframe from the load_data function
         print('Loading data...\n    MESSAGES: {}\n    CATEGORIES: {}'
               .format(messages_filepath, categories_filepath))
         df = load_data(messages_filepath, categories_filepath)
 
+        # clean and format the dataframe
         print('Cleaning data...')
         df = clean_data(df)
         
+        # save the dataframe to a database
         print('Saving data...\n    DATABASE: {}'.format(database_filepath))
         save_data(df, database_filepath)
         
+        # communicate successful completion of the program
         print('Cleaned data saved to database!')
     
+    # default if the correct number of arguments are not provided
     else:
+        #provide further instructions for how to correctly execute the program
         print('Please provide the filepaths of the messages and categories '\
               'datasets as the first and second argument respectively, as '\
               'well as the filepath of the database to save the cleaned data '\
