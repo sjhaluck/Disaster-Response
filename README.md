@@ -26,16 +26,20 @@ The project includes:
 3. Go to http://0.0.0.0:3001/
 
 ### Files:
-data/
--- disaster_messages.csv
--- disaster_categories.csv
--- process_data.py
+- app
+| - template
+| |- master.html  # main page of web app
+| |- go.html  # classification result page of web app
+|- run.py  # Flask file that runs app
 
-models/
--- train_classifier.py
+- data
+|- disaster_categories.csv  # data to process 
+|- disaster_messages.csv  # data to process
+|- process_data.py
+|- InsertDatabaseName.db   # database to save clean data to
 
-app/
--- run.py
--- templates/
----- go.html
----- master.html
+- models
+|- train_classifier.py
+|- classifier.pkl  # saved model 
+
+- README.md
