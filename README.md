@@ -47,4 +47,4 @@ The project includes:
 ```
 
 ### Methods and Limitations
-Due to the large number of categories relative to the size of the data set, it can be difficult to achieve accurate categorization. This is especially true for categories with very few classifications in the dataset. For this reason, it would be especially important to review recall (proportion of true positives correctly predicted by the model) over precision (proportion of predicted positives that were true), which would focus the training on maximizine the number of positive classifications to capture with the model.
+Due to the large number of categories relative to the size of the data set, it can be difficult to achieve accurate categorization. This is especially true for categories with very few classifications in the dataset. For this reason, it was determined especially important to score and optimize for recall (proportion of true positives correctly predicted by the model) over precision (proportion of predicted positives that were true), which would focus the training on maximizing the number of positive classifications to capture with the model.
