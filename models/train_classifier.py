@@ -14,7 +14,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score, make_scorer, recall_score
 import pickle
 
 def load_data(database_filepath):
@@ -83,17 +83,18 @@ def build_model():
     pipeline = Pipeline([
         ('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
-        ('clf', MultiOutputClassifier(estimator=RandomForestClassifier(n_estimators=10)))
+        ('clf', MultiOutputClassifier(estimator=RandomForestClassifier(n_estimators=10, class_weight='balanced')))
     ])
     
     # create a dictionary of parameters to test in order to optimize the machine learning model
-    parameters = {'vect__max_df':[0.8, 0.9],
+    parameters = {'vect__max_df':[0.9, 1.0],
                   'tfidf__smooth_idf':[True, False],
-                  'clf__estimator':[RandomForestClassifier(n_estimators=6),
-                                    KNeighborsClassifier(n_neighbors=5)]}
-
+                  'tfidf__sublinear_tf':[False, True]}
+    # set a scorer that will prioritize recall over precision to maximize identification of each label
+    scorer = make_scorer(recall_score, average = 'weighted')
     # prepare the GridSearchCV model to optimize the pipeline for the model across all combinations of parameter
-    cv = GridSearchCV(estimator=pipeline, param_grid=parameters, n_jobs=-1, cv=3, verbose=5)
+    cv = GridSearchCV(estimator=pipeline, param_grid=parameters, n_jobs=-1,
+                      cv=3, verbose=3, scoring = scorer)
     # return the completed model
     return cv
 
