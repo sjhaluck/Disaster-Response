@@ -42,8 +42,13 @@ def index():
     # TODO: Below is an example - modify to extract data for your own visuals
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
-    cat_counts = df.count(axis=1)[4:]
-    cat_labels = df.columns[4:]
+    cat_counts = df.iloc[:,4:].apply(pd.value_counts).fillna(0).iloc[[1]].transpose(copy=True)
+    cat_counts.rename(columns={1.0:'total'},inplace=True)
+    cat_counts = cat_counts.sort_values(by='total',ascending=False)[:20]/df.shape[0]*100
+    general_counts = cat_counts.iloc[:4]['total']
+    general_names = list(general_counts.index)
+    specific_counts = cat_counts.iloc[4:]['total']
+    specific_names = list(specific_counts.index)
     
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
@@ -63,6 +68,42 @@ def index():
                 },
                 'xaxis': {
                     'title': "Genre"
+                }
+            }
+        },
+        {
+            'data': [
+                Bar(
+                    x=general_names,
+                    y=general_counts
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of General Message Classifications',
+                'yaxis': {
+                    'title': "Relative Frequency (% of total)"
+                },
+                'xaxis': {
+                    'title': "General Message Classification"
+                }
+            }
+        },
+        {
+            'data': [
+                Bar(
+                    x=specific_names,
+                    y=specific_counts
+                )
+            ],
+
+            'layout': {
+                'title': 'Distribution of Specific Message Classifications',
+                'yaxis': {
+                    'title': "Relative Frequency (% of total)"
+                },
+                'xaxis': {
+                    'title': "Specific Message Classification"
                 }
             }
         }
