@@ -89,10 +89,8 @@ def build_model():
     # create a dictionary of parameters to test in order to optimize the machine learning model
     parameters = {'vect__max_df':[0.8, 0.9],
                   'tfidf__smooth_idf':[True, False],
-                  'clf__estimator':[RandomForestClassifier(n_estimators=10),
-                                    RandomForestClassifier(n_estimators=20),
-                                    KNeighborsClassifier(n_neighbors=11),
-                                    KNeighborsClassifier(n_neighbors=17)]}
+                  'clf__estimator':[RandomForestClassifier(n_estimators=6),
+                                    KNeighborsClassifier(n_neighbors=5)]}
 
     # prepare the GridSearchCV model to optimize the pipeline for the model across all combinations of parameter
     cv = GridSearchCV(estimator=pipeline, param_grid=parameters, n_jobs=-1, cv=3, verbose=5)
