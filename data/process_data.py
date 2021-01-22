@@ -51,6 +51,8 @@ def clean_data(df):
         categories[column] = categories[column].apply(lambda x: x[-1])
         # convert each number character into a numeric value
         categories[column] = pd.to_numeric(categories[column])
+        # convert each number to 0 or 1
+        categories[column].replace(2,1,inplace=True)
     # drop the previous categories column which was a long string
     df.drop(columns=['categories'],inplace=True)
     # concatenate the dataframe with the new category identifier dataframe
